@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { observer } from 'mobx-react';
+import { BtnClickCount } from './UI/BtnClickCount';
+import { AppState } from './State/AppState';
+import { makeAutoObservable, observable } from 'mobx';
 
 interface AppProps {}
 
+const globalState = observable({
+  appState: makeAutoObservable(new AppState())
+})
+
 function App({}: AppProps) {
-  // Create the count state.
-  const [count, setCount] = useState(0);
-  // Create the counter (+1 every second).
-  useEffect(() => {
-    const timer = setTimeout(() => setCount(count + 1), 1000);
-    return () => clearTimeout(timer);
-  }, [count, setCount]);
-  // Return the App component.
+
+  const appState = globalState.appState
+  const onClick = () => appState.addClick()
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -21,7 +25,10 @@ function App({}: AppProps) {
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
         <p>
-          Page has been open for <code>{count}</code> seconds.
+          State does not reset on update! cool!
+        </p>
+        <p>
+          <BtnClickCount onClick={onClick} count={appState.clickCount} />
         </p>
         <p>
           <a
@@ -38,4 +45,4 @@ function App({}: AppProps) {
   );
 }
 
-export default App;
+export default observer(App);
