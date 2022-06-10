@@ -1,21 +1,16 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { observer } from 'mobx-react';
 import { BtnClickCount } from './UI/BtnClickCount';
-import { AppState } from './State/AppState';
-import { makeAutoObservable, observable } from 'mobx';
+import { globalStore } from './Stores/globalStore';
 
 interface AppProps {}
 
-const globalState = observable({
-  appState: makeAutoObservable(new AppState())
-})
-
 function App({}: AppProps) {
 
-  const appState = globalState.appState
-  const onClick = () => appState.addClick()
+  const appStore = globalStore.appStore
+  const onClick = () => appStore.addClick()
   
   return (
     <div className="App">
@@ -28,7 +23,7 @@ function App({}: AppProps) {
           State does not reset on update! cool!
         </p>
         <p>
-          <BtnClickCount onClick={onClick} count={appState.clickCount} />
+          <BtnClickCount onClick={onClick} count={appStore.clickCount} />
         </p>
         <p>
           <a

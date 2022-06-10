@@ -1,6 +1,6 @@
 import { action, observable } from "mobx"
 
-export class AppState {
+export class AppModel {
   @observable clickCount: number = 0
 
   @action addClick() {
